@@ -1,0 +1,33 @@
+{
+  "name": "js-fundamentals-final",
+  "version": "1.0.0",
+  "description": "Final project for Albany Can Code's Javascript Fundamentals Fall 2020 cohort",
+  "private": true,
+  "scripts": {
+    "build": "webpack",
+    "start": "webpack serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TurbulentRice/js-fundamentals-final.git"
+  },
+  "keywords": [],
+  "author": "Sean Russell",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TurbulentRice/js-fundamentals-final/issues"
+  },
+  "homepage": "https://github.com/TurbulentRice/js-fundamentals-final#readme",
+  "devDependencies": {
+    "@babel/core": "^7.12.9",
+    "@babel/preset-env": "^7.12.7",
+    "babel-loader": "^8.2.2",
+    "css-loader": "^5.0.1",
+    "node-sass": "^5.0.0",
+    "sass-loader": "^10.1.0",
+    "style-loader": "^2.0.0",
+    "webpack": "^5.9.0",
+    "webpack-cli": "^4.2.0",
+    "webpack-dev-server": "^3.11.0"
+  }
+}
