@@ -1,4 +1,6 @@
-$brand-color: #5d92b6;
+$primary-color: #ffffff;
+$secondary-color: #f7f7f7;
+$text-color: #3f3f3f;
 
 html,
 body {
@@ -11,17 +13,59 @@ body {
   font-family: sans-serif;
   background: radial-gradient(
     circle,
-    lighten($brand-color, 20%) 0%,
-    $brand-color 100%
+    lighten($primary-color, 20%) 0%,
+    $primary-color 100%
   );
-  color: darken($brand-color, 30%);
+  color: darken($text-color, 30%);
 
   display: flex;
-  flex-direction: column;
+  // flex-direction: column;
   justify-content: center;
-  text-align: center;
 
   > * {
     margin: 0;
   }
+}
+
+button > * {
+  pointer-events: none;
+}
+
+#header {
+  text-align: center;
+}
+
+.gain {
+  color: #00cc22;
+}
+
+.longName {
+  text-align: left;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#topGainersList {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 5px;
+}
+
+.topGainer {
+  background-color: $secondary-color;
+}
+
+#quoteDisplayComponent {
+  background-color: $secondary-color;
+  margin-top: 1rem;
+  padding-top: 2rem;
+}
+
+.quoteDisplayKeys {
+  text-align: left;
+}
+.quoteDisplayValues {
+  text-align: right;
 }
