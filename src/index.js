@@ -1,5 +1,5 @@
 import "./style.scss"
-import { testData, testQuote, testProfile } from "./test.js"
+import { testWatchList, testQuote, testProfile, testMostWatched } from "./test.js"
 import * as currencySymbols from "./currencySymbols.json"
 const axios = require("axios").default;
 const xss = require("xss")
@@ -7,51 +7,61 @@ const xss = require("xss")
 const apiKey = '1fc83ef367mshe891aa0c06dcf4cp14360fjsn86475bd78dbe'
 const apiHost = 'yahoo-finance15.p.rapidapi.com'
 
-// Holds data about currently selected for reference later
+// DOM Elements
+const root = document.querySelector("#root")
+const watchList = document.querySelector("#watchList")
+const quoteDisplayCol = document.querySelector("#quoteDisplayCol")
+const quoteDisplayComponent = () => document.querySelector("#quoteDisplayComponent")
+
 const currentlyDisplayed = {
   quote: undefined,
   profile: undefined,
   history: undefined,
+  // watchList is array of quote objects currently displayed
+  //updated every time a populateWatchList function is called
+  watchList: []
 }
 
-// DOM Elements
-const root = document.querySelector("#root")
-const topGainersList = document.querySelector("#topGainersList")
-const quoteDisplayCol = document.querySelector("#quoteDisplayCol")
-const quoteDisplayComponent = () => document.querySelector("#quoteDisplayComponent")
-
-// Get a company profile
-const getProfile = (symbol) => {
-  const options = {
-    method: 'GET',
-    url: `https://yahoo-finance15.p.rapidapi.com/api/yahoo/qu/quote/${symbol}/asset-profile`,
-    headers: {
-      'x-rapidapi-key': apiKey,
-      'x-rapidapi-host': apiHost
-    }
-  }
-  return axios.request(options)
+// Main event handler for updating the watchlist column
+const updateWatchList = event => {
+  const target = event.target.value;
+  // Verify ok, clear watchlist
+  watchList.innerHTML = "";
+  target === "Top gainers" ? populateTopGainers() : populateMostWatched();
 }
-
-
 
 //////////////////////
-// HISTORY
+// WATCHLIST
 //////////////////////
-const getStockHistory = (symbol) => {
-  const options = {
-    method: "GET",
-    url: `https://yahoo-finance15.p.rapidapi.com/api/yahoo/hi/history/${symbol}/15m`,
-    headers: {
-      'x-rapidapi-key': apiKey,
-      'x-rapidapi-host': apiHost
-    }
-  }
+const populateMostWatched = () => {
+  // getMostWatched()
+  //   .then(response => response.data[0].quotes.slice(0, 25))
+  //   .then(symbols => getQuote(symbols))
+  //   .then(data => data.data)
+  //   .then(quotes => {
+  //     console.log(JSON.stringify(quotes))
+  //     quotes.forEach(quote => addToWatchlist(quote))
+  //     currentlyDisplayed.watchList = quotes
+  //   })
+  //   .catch(error => console.log(error))
+  testMostWatched.forEach(quote => addToWatchlist(quote))
 }
 
-////////////////
-// SHOW QUOTE DATA
-////////////////
+const populateTopGainers = () => {
+  // getTopGainers()
+  //   .then(response => response.data.quotes)
+  //   .then(data => {
+  //     data.forEach(quote => addToWatchlist(quote))
+  //     currentlyDisplayed.watchList = data;
+  //   })
+  //   .catch(error => console.log(error))
+  
+  testWatchList.forEach(quote => addToWatchlist(quote))
+}
+
+//////////////////////
+// QUOTE DISPLAY
+//////////////////////
 const displayQuote = (event) => {
   // const symbol = event.target.id
   // let quote;
@@ -67,10 +77,16 @@ const displayQuote = (event) => {
   updateQuoteDisplay(testQuote, testProfile)
 }
 
-const getQuote = (symbol) => {
+//////////////////////
+// HISTORY
+//////////////////////
+
+// REQUESTS
+
+const getMostWatched = () => {
   const options = {
     method: "GET",
-    url: 'https://yahoo-finance15.p.rapidapi.com/api/yahoo/qu/quote/' + symbol,
+    url: "https://yahoo-finance15.p.rapidapi.com/api/yahoo/tr/trending",
     headers: {
       'x-rapidapi-key': apiKey,
       'x-rapidapi-host': apiHost
@@ -79,8 +95,85 @@ const getQuote = (symbol) => {
   return axios.request(options)
 }
 
+const getTopGainers = () => {
+  const options = {
+    method: "GET",
+    url: "https://yahoo-finance15.p.rapidapi.com/api/yahoo/ga/topgainers",
+    params: {start: '0'},
+    headers: {
+      'x-rapidapi-key': apiKey,
+      'x-rapidapi-host': apiHost
+    }
+  }
+  return axios.request(options)
+}
+
+const getQuote = (symbol) => {
+  let search = Array.isArray(symbol) ? symbol.join(",") : symbol.trim()
+  const options = {
+    method: "GET",
+    url: 'https://yahoo-finance15.p.rapidapi.com/api/yahoo/qu/quote/' + search,
+    headers: {
+      'x-rapidapi-key': apiKey,
+      'x-rapidapi-host': apiHost
+    }
+  }
+  return axios.request(options)
+}
+
+const getProfile = (symbol) => {
+  const options = {
+    method: 'GET',
+    url: `https://yahoo-finance15.p.rapidapi.com/api/yahoo/qu/quote/${symbol}/asset-profile`,
+    headers: {
+      'x-rapidapi-key': apiKey,
+      'x-rapidapi-host': apiHost
+    }
+  }
+  return axios.request(options)
+}
+
+const getStockHistory = (symbol) => {
+  const options = {
+    method: "GET",
+    url: `https://yahoo-finance15.p.rapidapi.com/api/yahoo/hi/history/${symbol}/15m`,
+    headers: {
+      'x-rapidapi-key': apiKey,
+      'x-rapidapi-host': apiHost
+    }
+  }
+}
+
+
+// UPDATING DOM COMPONENTS
+// app.js
+
+const addToWatchlist = (quote) => {
+  let down = quote.regularMarketChange < 0;
+  let html = xss(
+`<div class="d-flex justify-content-between">
+    <h6>${quote.symbol}</h6>
+    <small class="${!down ? "gain" : "loss"}">${!down ? "+" : ''}${quote.regularMarketChange.toFixed(2)}</small>
+    <small class="${!down ? "gain" : "loss"}">${!down ? "+" : ''}${quote.regularMarketChangePercent.toFixed(2)}%</small>
+  </div>
+  <small class="mb-0 d-flex longName">${quote.longName}</small>`, {whiteList: {
+    div: ['class'],
+    h6: [],
+    small: ['class'],
+    p: ['class'],
+  }});
+
+  let newListItem = document.createElement('button')
+  newListItem.id = quote.symbol;
+  newListItem.classList.add("list-group-item", "list-group-item-action", "align-items-start", "watchListElement")
+  newListItem.innerHTML = html;
+
+  newListItem.addEventListener('click', displayQuote)
+  
+  watchList.appendChild(newListItem)
+}
+
 // Update HTML within quoteDisplayCol
-// Since this is very close to the DOM, move to app.js
 const updateQuoteDisplay = (quote, profile) => {
   const currency = currencySymbols[quote.currency]
   let html = xss(
@@ -140,76 +233,26 @@ const updateQuoteDisplay = (quote, profile) => {
     strong: []
   }});
 
-  // Save info for later to avoid more calls
+  // Update currentlyDisplayed state with data, avoid redundant calls
   currentlyDisplayed.quote = quote;
   currentlyDisplayed.profile = profile;
 
   const newQuoteComponent = document.createElement('div');
   newQuoteComponent.id = "quoteDisplayComponent";
   // newQuoteComponent.id = quote.symbol;  
-  newQuoteComponent.classList.add("jumbotron")
+  newQuoteComponent.classList.add("jumbotron", "quoteDisplayComponent")
   newQuoteComponent.innerHTML = html;
 
   quoteDisplayComponent() ? quoteDisplayCol.replaceChild(newQuoteComponent, quoteDisplayComponent()) : quoteDisplayCol.appendChild(newQuoteComponent)
 }
 
-// /////////////
-// TOP GAINERS
-// /////////////
-const populateTopGainersCol = () => {
-  // getTopGainers()
-  //   .then(response => response.data.quotes)
-  //   .then(data => data.forEach(quote => addTopGainer(quote)))
-  //   .catch(error => console.log(error))
-  
-  testData.forEach(quote => addTopGainer(quote))
-}
-
-const getTopGainers = () => {
-  const options = {
-    method: "GET",
-    url: "https://yahoo-finance15.p.rapidapi.com/api/yahoo/ga/topgainers",
-    params: {start: '0'},
-    headers: {
-      'x-rapidapi-key': apiKey,
-      'x-rapidapi-host': apiHost
-    }
-  }
- return axios.request(options)
-}
 
 
+// Setup
+document.querySelector("#watchListSelect").addEventListener('change', updateWatchList)
 
-// Deconstructs one quote object, taking the info we need and adding to list
-const addTopGainer = (quote) => {
-  let html = xss(
-
-`<div class="d-flex justify-content-between">
-    <h6>${quote.symbol}</h6>
-    <small class="gain">+$${quote.regularMarketChange.toFixed(2)}</small>
-    <small class="gain">+${quote.regularMarketChangePercent.toFixed(2)}%</small>
-  </div>
-  <small class="mb-0 d-flex longName">${quote.longName}</small>`, {whiteList: {
-    div: ['class'],
-    h6: [],
-    small: ['class'],
-    p: ['class'],
-  }});
-
-  let newListItem = document.createElement('button')
-  newListItem.id = quote.symbol;
-  newListItem.classList.add("list-group-item", "list-group-item-action", "align-items-start", "topGainer")
-  newListItem.innerHTML = html;
-
-  // Observer pattern, all buttons will trigger same event
-  newListItem.addEventListener('click', displayQuote)
-  
-  topGainersList.appendChild(newListItem)
-}
-
-
-// getTopGainers().then(response => console.log(response.data.quotes))
-
-populateTopGainersCol()
-
+populateTopGainers()
 displayQuote()
+
+
+
