@@ -12,15 +12,18 @@ module.exports = {
     rules: [
       {
         test: /\.js$/i,
+        enforce: "pre",
         exclude: /node_modules/,
         loader: "babel-loader"
       },
       {
         test: /\.s[ac]ss$/i,
-        use: ["style-loader", "css-loader", "sass-loader"]
+        use: ["source-map-loader","style-loader", "css-loader", "sass-loader"]
       }
     ]
   },
+
+  devtool: "source-map",
 
   devServer: {
     port: 7000,
