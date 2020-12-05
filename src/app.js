@@ -1,4 +1,4 @@
-// UPDATING DOM COMPONENTS
+// DOM COMPONENTS
 // app.js
 
 // DOM Elements
