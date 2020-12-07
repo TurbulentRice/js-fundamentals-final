@@ -1,4 +1,5 @@
 const path = require("path");
+const dotenv = require('dotenv-webpack')
 
 module.exports = {
   entry: "./src/index.js", // Your input file
@@ -30,5 +31,8 @@ module.exports = {
     publicPath: "/assets/", // Folder where all Webpack generated code will go
     contentBase: path.resolve(__dirname, "./public"), // Folder that has your index.html file
     watchContentBase: true // Makes it so the browser will refresh when you make changes to the index.html file too
-  }
+  },
+  plugins: [
+    new dotenv()
+  ]
 };

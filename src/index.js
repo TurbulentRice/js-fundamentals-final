@@ -11,7 +11,7 @@ import * as app from "./app.js"
 const searchStockTicker = event => {
   const symbol = document.querySelector("#stockTickerInput").value.trim().toUpperCase();
   
-  // This decides if search works, replace with check
+  // Decides if search works, replace with check
   const symbolIsGood = true;
   symbolIsGood && displayQuote(event);
 }
@@ -81,6 +81,7 @@ document.querySelector("#watchListSelect")
   .addEventListener('change', updateWatchList)
 document.querySelector("#searchBtn")
   .addEventListener('click', searchStockTicker)
+  
 populateTopGainers().then(() => {
   addWatchlistListeners()
   app.watchList.firstChild.click()

@@ -2,30 +2,22 @@ const axios = require("axios").default;
 import { testTopGainers, testQuote, testProfile, testMostWatched } from "./test.js"
 // REQUESTS
 
-const api = (function () {
-  const key = '1fc83ef367mshe891aa0c06dcf4cp14360fjsn86475bd78dbe';
-  const host = 'yahoo-finance15.p.rapidapi.com'
-  return {
-    key,
-    host
-  }
-})();
-
 const apiOptions = (url) => ({
   method: "GET",
   url,
   headers: {
-    'x-rapidapi-key': api.key,
-    'x-rapidapi-host': api.host
+    'x-rapidapi-key': process.env.apiKey,
+    'x-rapidapi-host': process.env.apiHost
   }
 })
 
 export const getMostWatched = () => {
   const url = "https://yahoo-finance15.p.rapidapi.com/api/yahoo/tr/trending"
   const options = apiOptions(url)
+  console.log(options)
 
   // return axios.request(options)
-  //   .then(response => response.data[0].quotes.slice(0, 25))
+  //   .then(response => response.data[0].quotes.slice(0, 10))
   //   .then(symbols => getQuote(symbols))
   //   .then(data => data.data)
   return Promise.resolve(testMostWatched)
@@ -34,7 +26,6 @@ export const getMostWatched = () => {
 export const getTopGainers = () => {
   const url = "https://yahoo-finance15.p.rapidapi.com/api/yahoo/ga/topgainers"
   const options = apiOptions(url)
-
   // return axios.request(options)
   //   .then(response => response.data.quotes)
   return Promise.resolve(testTopGainers)
@@ -60,12 +51,10 @@ export const getProfile = (symbol) => {
 }
 
 export const getStockHistory = (symbol) => {
-  const options = {
-    method: "GET",
-    url: `https://yahoo-finance15.p.rapidapi.com/api/yahoo/hi/history/${symbol}/15m`,
-    headers: {
-      'x-rapidapi-key': api.key,
-      'x-rapidapi-host': api.host
-    }
-  }
+  const url  =`https://yahoo-finance15.p.rapidapi.com/api/yahoo/hi/history/${symbol}/15m`
+  const options = apiOptions(url)
+
+  // return axios.request(options)
+  //   .then(response => response.data)
+  return Promise.resolve(testHistory)
 }
