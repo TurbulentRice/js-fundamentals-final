@@ -87,3 +87,4 @@ populateTopGainers().then(() => {
   app.watchList.firstChild.click()
 });
 
+

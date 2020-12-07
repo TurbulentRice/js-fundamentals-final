@@ -6,16 +6,14 @@ const apiOptions = (url) => ({
   method: "GET",
   url,
   headers: {
-    'x-rapidapi-key': process.env.apiKey,
-    'x-rapidapi-host': process.env.apiHost
+    'x-rapidapi-key': process.env.API_KEY,
+    'x-rapidapi-host': process.env.API_HOST
   }
 })
 
 export const getMostWatched = () => {
   const url = "https://yahoo-finance15.p.rapidapi.com/api/yahoo/tr/trending"
   const options = apiOptions(url)
-  console.log(options)
-
   // return axios.request(options)
   //   .then(response => response.data[0].quotes.slice(0, 10))
   //   .then(symbols => getQuote(symbols))
