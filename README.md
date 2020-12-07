@@ -1,6 +1,8 @@
-# js-fundamentals-final
+# Stock Rocket
 
-Stock Rocket - Stock Market Tracker App - Final project for Albany Can Code's Javascript Fundamentals Fall 2020 cohort
+Global market tracker app, providing simple but useful tools for monitoring daily market prices, trends and statistics, and individual stock/fund performance. Leverages the Yahoo Finance API to provide real-time quotes, histories, and news.
+
+Final project for Albany Can Code's Javascript Fundamentals Fall 2020 cohort.
 
 ## INSTRUCTIONS
 
