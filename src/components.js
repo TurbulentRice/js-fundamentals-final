@@ -1,21 +1,75 @@
 import * as currencySymbols from "./currencySymbols.json"
 export const xss = require("xss")
 
-export const makeStockChartComponent = (history) => {
-  
-  
-  return newChartComponent;
+export const makeChartComponent = (history, chartDiv) => {
+  let symbol = history.meta.symbol
+  let currency = currencySymbols[history.meta.currency]
+    ? currencySymbols[history.meta.currency].symbol
+    : ''
+
+  // Graphing data
+  const priceData = Object.values(history.items)
+
+  let dataPoints = priceData.map(dataPoint => {
+    const [ day, month, year ] = dataPoint.date.split("-")
+    return {
+      x: new Date(year, month-1, day),
+      y: Number(dataPoint.close)
+    }
+  })
+
+  const newChart = new CanvasJS.StockChart(chartDiv, {
+    theme: "light1",
+    height: 350,
+    exportEnabled: true,
+    backgroundColor: "#f7f7f7",
+    // title:{
+    //   text: `${symbol} Price History`,
+    //   fontFamily: 'helvetica'
+    // },
+    subtitles: [{
+      text: `${symbol} price history`,
+      fontFamily: 'helvetica'
+    }],
+    charts: [{
+      axisY: {
+        prefix: `${currencySymbols[history.meta.currency].symbol}`,
+        title: "Price"
+      },
+      data: [{
+        type: "line",
+        dataPoints
+      }]
+    }],
+    navigator: {
+      slider: {
+        minimum: dataPoints[0].x,
+        max: dataPoints[dataPoints.length-1].x
+      }
+    }
+  })
+  return newChart
 }
 
 export const makeWatchListElement = (quote) => {
   let down = quote.regularMarketChange < 0;
+  const regMarketChange = quote.regularMarketChange
+    ? quote.regularMarketChange.toFixed(2)
+    : "n/a"
+  const marketChangePercent = quote.regularMarketChangePercent
+    ? quote.regularMarketChangePercent.toFixed(2)
+    : "n/a"
+  const currency = currencySymbols[quote.currency]
+    ? currencySymbols[quote.currency].symbol
+    : '';
   let html = xss(
   `<div class="d-flex justify-content-between">
     <h6>${quote.symbol}</h6>
-    <small class="${!down ? "gain" : "loss"}">${!down ? "+" : ''}${currencySymbols[quote.currency].symbol + quote.regularMarketChange.toFixed(2)}</small>
-    <small class="${!down ? "gain" : "loss"}">${!down ? "+" : ''}${quote.regularMarketChangePercent.toFixed(2)}%</small>
+    <small class="${!down ? "gain" : "loss"}">${!down ? "+" : ''}${currency}${regMarketChange}</small>
+    <small class="${!down ? "gain" : "loss"}">${!down ? "+" : ''}${marketChangePercent}%</small>
+    <small>${currency}${quote.regularMarketPrice}</small>
   </div>
-  <small class="mb-0 d-flex longName">${quote.longName}</small>`, {whiteList: {
+  <small class="mb-0 d-flex longName">${quote.longName || quote.shortName || "n/a"}</small>`, {whiteList: {
     div: ['class'],
     h6: [],
     small: ['class'],
@@ -30,38 +84,50 @@ export const makeWatchListElement = (quote) => {
 }
 
 export const makeQuoteDisplayComponent = (quote, profile) => {
+  const regMarketChange = quote.regularMarketChange
+    ? quote.regularMarketChange.toFixed(2)
+    : "n/a"
+  const marketChangePercent = quote.regularMarketChangePercent
+    ? quote.regularMarketChangePercent.toFixed(2)
+    : "n/a"
   const currency = currencySymbols[quote.currency]
+    ? currencySymbols[quote.currency].symbol
+    : '';
   let down = quote.regularMarketChange < 0;
   let html = xss(
-    `<div class="d-flex justify-content-between">
-      <h2 class="display-4">${quote.symbol}</h2>
-      <h4 class="mt-3">${currency.symbol}${quote.regularMarketPrice}</h4>
-      <h6 class="${!down ? "gain" : "loss"} mt-4">${!down ? "+" : ''}${currency.symbol + quote.regularMarketChange.toFixed(2)}</h4>
-      <h6 class="${!down ? "gain" : "loss"} mt-4">${!down ? "+" : ''}${quote.regularMarketChangePercent.toFixed(2)}%</h4>
+    `<div class="d-flex justify-content-between pl-3">
+      <h2 class="display-4 m-0">${quote.symbol}</h2>
+      <h4 class="mt-3">${currency}${quote.regularMarketPrice}</h4>
+      <h6 class="${!down ? "gain" : "loss"} mt-4">${!down ? "+" : ''}${currency}${regMarketChange}</h4>
+      <h6 class="${!down ? "gain" : "loss"} mt-4">${!down ? "+" : ''}${marketChangePercent}%</h4>
     </div>
-    <div class="d-flex justify-content-between">
-      <p class="lead mb-1">${quote.longName}</p>
+    <div class="d-flex justify-content-between pl-3">
+      <p class="lead mb-0">${quote.longName || quote.shortName}</p>
+      <button title="Remove quote card" type="button" class="btn btn-sm text-center removeQuoteComponentBtn" data-symbol="${quote.symbol}">
+        <svg width="1.5em" height="1.5em" class="bi bi-trash" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"></path>
+          <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"></path>
+        </svg>
+      </button>
 
     </div>
-    <div class="d-flex justify-content-between">
-      <p><small>${profile.industry}, ${profile.sector}</small></p>
-      <p><small>${profile.city}, ${profile.country} (${quote.currency})</small></p>
+    <div class="d-flex justify-content-between mt-0 pt-0 pl-3">
+      <p><small>${profile.industry || "industry n/a"}, ${profile.sector || "sector n/a"}</small></p>
+      <p><small>${profile.city || "city n/a"}, ${profile.country || "country n/a"} (${quote.currency})</small></p>
     </div>
 
-    <hr class="mt-0">
+    <hr class="mt-0 ml-3">
     <div id="quoteTable" class="container-fluid">
       <div class="row">
         <div class="col small">
           <p><strong>Day high: </strong></p>
           <p><strong>Day low: </strong></p>
-          <p><strong>Prev close: </strong></p>
           <p><strong>Open: </strong></p>
         </div>
         <div class="col small">
-          <p>${currency.symbol}${quote.regularMarketDayHigh}</p>
-          <p>${currency.symbol}${quote.regularMarketDayLow}</p>
-          <p>${currency.symbol}${quote.regularMarketPreviousClose}</p>
-          <p>${currency.symbol}${quote.regularMarketOpen}</p>
+          <p>${currency}${quote.regularMarketDayHigh}</p>
+          <p>${currency}${quote.regularMarketDayLow}</p>
+          <p>${currency}${quote.regularMarketOpen}</p>
         </div>
         <div class="col small">
           <p><strong>Day volume: </strong></p>
@@ -75,14 +141,22 @@ export const makeQuoteDisplayComponent = (quote, profile) => {
         </div>
       </div>
     </div>
-    <hr class="my-2">
-    <div id=graph${quote.symbol} class="container-fluid">
+
+    <hr class="mt-0 mb-1 ml-3">
+    <div class="d-flex justify-content-left ml-3">
+      <button id="${quote.symbol}ShowChartBtn" type="button" class="btn btn-link btn-sm showChartBtn p-0 mb-0" data-symbol="${quote.symbol}">
+        Show chart
+      </button>
+    </div>
+    <div id="${quote.symbol}ChartDiv" class="mt-1" style="display:none; height: 360px; width: 100%" data-symbol="${quote.symbol}">
     
     </div>
 
   </div>`, {whiteList: {
-    button: ['type', 'class', 'data-toggle', 'data-content'],
-    div: ['class'],
+    button: ['id', 'type', 'class', 'data-symbol'],
+    svg: ['class', 'viewBox', 'xmlns', 'fill', 'width', 'height'],
+    path: ['d', 'fill-rule'],
+    div: ['class', 'id', 'data-symbol', 'style'],
     h2: ['class'],
     h4: ['class'],
     h6: ['class'],
@@ -94,9 +168,14 @@ export const makeQuoteDisplayComponent = (quote, profile) => {
   }});
 
   const newQuoteComponent = document.createElement('div');
-  newQuoteComponent.id = "quoteDisplayComponent";
+  newQuoteComponent.id = `${quote.symbol+'QuoteComponent'}`;
+  newQuoteComponent.setAttribute('data-symbol', quote.symbol)
   // newQuoteComponent.id = quote.symbol;  
-  newQuoteComponent.classList.add("jumbotron", "quoteDisplayComponent")
+  newQuoteComponent.classList.add("jumbotron", "quoteDisplayComponent", "pt-3", "pb-2", "pl-2")
   newQuoteComponent.innerHTML = html;
   return newQuoteComponent;
+}
+
+export const makeProfileComponent = () => {
+  
 }

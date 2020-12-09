@@ -60,10 +60,19 @@ button > * {
   background-color: $secondary-color;
 }
 
-#quoteDisplayComponent {
+#watchListCol {
+  float: right;
+}
+
+#quoteDisplayCol {
+  float: right;
+}
+
+.quoteDisplayComponent {
   background-color: $secondary-color;
   margin-top: 1rem;
-  padding-top: 2rem;
+  padding-top: 1rem;
+  border-radius: 5px;
 }
 
 .quoteDisplayKeys {
@@ -71,8 +80,4 @@ button > * {
 }
 .quoteDisplayValues {
   text-align: right;
-}
-
-#quoteTable {
-  font-size: 0.5rem;
 }

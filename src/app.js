@@ -1,6 +1,6 @@
 // Updating DOM Elements
 
-import { makeWatchListElement, makeQuoteDisplayComponent } from "./components.js"
+import { makeWatchListElement, makeQuoteDisplayComponent, makeChartComponent } from "./components.js"
 
 // Elements
 export const root = document.querySelector("#root")
@@ -14,7 +14,8 @@ export const quoteDisplayComponent = () => document.querySelector("#quoteDisplay
 // Maybe use Sets instead of Arrays, and push new quotes on as they are called
 export const currentlyDisplayed = {
   quoteComponents: [],
-  watchList: []
+  watchList: [],
+  histories: {}
 }
 
 // Add/remove components
@@ -25,13 +26,49 @@ export const addToWatchlist = (quote) => {
 }
 
 export const updateQuoteDisplay = (quote, profile) => {
-  const newQuoteComponent = makeQuoteDisplayComponent(quote, profile)
-  // "Replace" behavior. consider "add", "remove"
-  quoteDisplayComponent() ? quoteDisplayCol.replaceChild(newQuoteComponent, quoteDisplayComponent())
-    : quoteDisplayCol.appendChild(newQuoteComponent)
+  const replaceQuoteComponent = (newComponent, oldComponent) => {
+    quoteDisplayCol.replaceChild(newComponent, oldComponent.component)
+    removeQuoteComponentFromState(oldComponent.symbol)
+  }
+  const addQuoteComponent = (newComponent) => {
+    quoteDisplayCol.appendChild(newComponent)
+  }
 
-  // Update currentlyDisplayed state with data, avoid redundant calls
-  currentlyDisplayed.quote = quote;
-  currentlyDisplayed.profile = profile;
+  const newQuoteComponent = makeQuoteDisplayComponent(quote, profile)
+
+  // Check currentlyDisplayed to decide replace/add behavior
+  let alreadyDisplayed = currentlyDisplayed.quoteComponents.find(component => component.symbol === quote.symbol)
+  alreadyDisplayed
+    ? replaceQuoteComponent(newQuoteComponent, alreadyDisplayed)
+    : addQuoteComponent(newQuoteComponent)
+    
+  // Update state
+  let componentObj = {
+    symbol: quote.symbol,
+    profile,
+    component: newQuoteComponent
+  }
+  currentlyDisplayed.quoteComponents.push(componentObj);
+}
+
+// Take a component, find object with that component
+export const removeQuoteComponentFromState = (symbol) => {
+  currentlyDisplayed.quoteComponents = currentlyDisplayed.quoteComponents.filter(component => component.symbol !== symbol)
+}
+
+export const removeFromQuoteDisplay = (componentToRemove) => {
+  removeQuoteComponentFromState(componentToRemove.dataset.symbol)
+  componentToRemove.remove()
+}
+
+export const addChartToQuoteDisplay = (history) => {
+  const chartDiv = document.querySelector(`#${history.meta.symbol}ChartDiv`)
+  chartDiv.style.display = "block"
+  currentlyDisplayed.histories[history.meta.symbol] = history;
+  
+  const newChart = makeChartComponent(history, chartDiv)
+
+  newChart.render()
+
 }
 
