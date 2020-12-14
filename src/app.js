@@ -1,5 +1,4 @@
 // Updating DOM Elements
-
 import { makeWatchListElement, makeQuoteDisplayComponent, makeChartComponent } from "./components.js"
 
 // Elements
@@ -11,7 +10,6 @@ export const quoteDisplayComponent = () => document.querySelector("#quoteDisplay
 
 // "State" representation
 // Keep track of data to avoid multiple calls
-// Maybe use Sets instead of Arrays, and push new quotes on as they are called
 export const currentlyDisplayed = {
   quoteComponents: [],
   watchList: [],
@@ -19,7 +17,6 @@ export const currentlyDisplayed = {
 }
 
 // Add/remove components
-
 export const addToWatchlist = (quote) => {
   const newListItem = makeWatchListElement(quote)
   watchList.appendChild(newListItem)
@@ -51,11 +48,9 @@ export const updateQuoteDisplay = (quote, profile) => {
   currentlyDisplayed.quoteComponents.push(componentObj);
 }
 
-// Take a component, find object with that component
 export const removeQuoteComponentFromState = (symbol) => {
   currentlyDisplayed.quoteComponents = currentlyDisplayed.quoteComponents.filter(component => component.symbol !== symbol)
 }
-
 export const removeFromQuoteDisplay = (componentToRemove) => {
   removeQuoteComponentFromState(componentToRemove.dataset.symbol)
   componentToRemove.remove()
@@ -65,10 +60,7 @@ export const addChartToQuoteDisplay = (history) => {
   const chartDiv = document.querySelector(`#${history.meta.symbol}ChartDiv`)
   chartDiv.style.display = "block"
   currentlyDisplayed.histories[history.meta.symbol] = history;
-  
   const newChart = makeChartComponent(history, chartDiv)
-
   newChart.render()
-
 }
 

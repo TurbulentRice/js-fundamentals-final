@@ -2,11 +2,10 @@ import "./style.scss"
 import { getMostWatched, getTopGainers, getQuote, getProfile, getStockHistory } from "./async.js"
 import * as app from "./app.js"
 
-// Events
-// Follow form: getData.then(addDataToComponent)
+// Main events
 
 /////////////////////
-// Listeners
+// Update Listeners
 /////////////////////
 const addListeners = {
   toWatchlist: () => document.querySelectorAll(".watchListElement").forEach(li => li.addEventListener('click', displayQuote)),
@@ -21,7 +20,7 @@ const addListeners = {
 /////////////////////
 const searchStockTicker = event => {
   const symbol = document.querySelector("#stockTickerInput").value.trim().toUpperCase();
-  
+
   // Decides if search works, replace with check
   const symbolIsGood = true;
   symbolIsGood && displayQuote(event);
@@ -33,8 +32,7 @@ const searchStockTicker = event => {
 const updateWatchList = event => {
   app.watchList.innerHTML = "";
   const update = event.target.value === "Top gainers"
-    ? populateTopGainers()
-    : populateMostWatched();
+    ? populateTopGainers() : populateMostWatched();
   update.then(() => addListeners.toWatchlist())
 }
 
@@ -59,12 +57,10 @@ const populateTopGainers = () => {
 //////////////////////
 // QUOTE DISPLAY
 //////////////////////
-
 const displayQuote = event => {
   const symbol = event.target.id === 'searchBtn'
     ? document.querySelector("#stockTickerInput").value.trim().toUpperCase()
     : event.target.id;
-
   // Check if the symbol is already stored, display quote from memory
   const quoteFromWatchList = app.currentlyDisplayed.watchList.find(element => element.symbol === symbol)
   if (quoteFromWatchList) {
@@ -73,7 +69,6 @@ const displayQuote = event => {
       .then(() => addListeners.toQuoteDisplay())
       .catch(error => console.log(error))
   }
-
   // Get quote, get profile, then update
   Promise.all([getQuote(symbol), getProfile(symbol)])
     .then(quoteAndProfile => app.updateQuoteDisplay(...quoteAndProfile))
@@ -81,14 +76,16 @@ const displayQuote = event => {
     .catch(error => console.log(error)
   )
 }
-
 const removeQuote = event => {
   app.removeFromQuoteDisplay(event.target.parentNode.parentNode)
 }
 
-// Show chart button action, adds a Chart component to Quote
+
+
+//////////////////////
+// GRAPHING
+//////////////////////
 const showChart = event => {
-  // Determine symbol and interval
   let symbol = event.target.dataset.symbol
   let interval = '1d'
   let quoteComponentObj = app.currentlyDisplayed.quoteComponents.find(component => component.symbol === symbol)
@@ -106,7 +103,6 @@ const showChart = event => {
   displaySelector.textContent = "Hide chart";
   displaySelector.onclick = hideChart;
 }
-
 const hideChart = event => {
   const symbol = event.target.dataset.symbol
   const chartDiv = document.querySelector(`#${symbol}ChartDiv`)
@@ -114,7 +110,6 @@ const hideChart = event => {
   const displaySelector = document.querySelector(`#${symbol}ShowChartBtn`);
   displaySelector.textContent = "Show chart";
   displaySelector.onclick = reShowChart;
-
 }
 const reShowChart = event => {
   const symbol = event.target.dataset.symbol
@@ -123,13 +118,7 @@ const reShowChart = event => {
   const displaySelector = document.querySelector(`#${symbol}ShowChartBtn`);
   displaySelector.textContent = "Hide chart";
   displaySelector.onclick = hideChart;
-
 }
-
-//////////////////////
-// HISTORY
-//////////////////////
-
 
 
 // Setup
@@ -142,5 +131,4 @@ populateTopGainers().then(() => {
   addListeners.toWatchlist()
   app.watchList.firstChild.click()
 });
-
 
