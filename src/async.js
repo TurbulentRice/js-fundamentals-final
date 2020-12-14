@@ -12,7 +12,7 @@ const apiOptions = (url) => ({
 })
 
 export const getMostWatched = () => {
-  return Promise.resolve(testMostWatched) // test code
+  // return Promise.resolve(testMostWatched) // test code
   const url = "https://yahoo-finance15.p.rapidapi.com/api/yahoo/tr/trending"
   const options = apiOptions(url)
   return axios.request(options)
@@ -22,7 +22,7 @@ export const getMostWatched = () => {
 }
 
 export const getTopGainers = () => {
-  return Promise.resolve(testTopGainers) // test code
+  // return Promise.resolve(testTopGainers) // test code
   const url = "https://yahoo-finance15.p.rapidapi.com/api/yahoo/ga/topgainers"
   const options = apiOptions(url)
   return axios.request(options)
@@ -30,7 +30,7 @@ export const getTopGainers = () => {
 }
 
 export const getQuote = (symbol) => {
-  return Promise.resolve(testQuote) // test code
+  // return Promise.resolve(testQuote) // test code
   let isMultiple = Array.isArray(symbol);
   let search = isMultiple ? symbol.join(",") : symbol.trim()
   const url = `https://yahoo-finance15.p.rapidapi.com/api/yahoo/qu/quote/${search}`
@@ -42,7 +42,7 @@ export const getQuote = (symbol) => {
 }
 
 export const getProfile = (symbol) => {
-  return Promise.resolve(testProfile) // test code
+  // return Promise.resolve(testProfile) // test code
   const url = `https://yahoo-finance15.p.rapidapi.com/api/yahoo/qu/quote/${symbol}/asset-profile`
   const options = apiOptions(url)
 
@@ -51,7 +51,7 @@ export const getProfile = (symbol) => {
 }
 
 export const getStockHistory = (symbol, interval) => {
-  return Promise.resolve(testHistory) // test code
+  // return Promise.resolve(testHistory) // test code
   const url  =`https://yahoo-finance15.p.rapidapi.com/api/yahoo/hi/history/${symbol}/${interval}`
   const options = apiOptions(url)
 
