@@ -1,18 +1,15 @@
 import * as currencySymbols from "./currencySymbols.json"
 export const xss = require("xss")
 
+// HTML Components
+
 const sanitize = (html) => xss(html, {whiteList: {
-  small: ['class'],
-  p: ['class'],
-  button: ['id', 'type', 'class', 'data-symbol'],
+  small: ['class'], strong: [], p: ['class'],
+  button: ['id', 'type', 'class', 'data-symbol', 'title', 'data-content', 'data-toggle', 'data-placement', 'data-container', 'data-trigger'],
   svg: ['class', 'viewBox', 'xmlns', 'fill', 'width', 'height'],
-  path: ['d', 'fill-rule'],
+  path: ['d', 'fill-rule'], hr: ['class'],
   div: ['class', 'id', 'data-symbol', 'style'],
-  h2: ['class'],
-  h4: ['class'],
-  h6: ['class'],
-  hr: ['class'],
-  strong: []
+  h2: ['class'], h4: ['class'], h6: ['class']
 }})
 
 export const makeChartComponent = (history, chartDiv) => {
@@ -34,17 +31,13 @@ export const makeChartComponent = (history, chartDiv) => {
     height: 350,
     exportEnabled: true,
     backgroundColor: "#f7f7f7",
-    // title:{
-    //   text: `${symbol} Price History`,
-    //   fontFamily: 'helvetica'
-    // },
     subtitles: [{
       text: `${symbol} price history`,
       fontFamily: 'helvetica'
     }],
     charts: [{
       axisY: {
-        prefix: `${currency}`,
+        prefix: currency,
         title: "Price"
       },
       data: [{
@@ -62,14 +55,19 @@ export const makeChartComponent = (history, chartDiv) => {
   return newChart
 }
 
+// Utility function for easy access to quote object data
+const unpackQuote = (quote) => ({
+  regMarketChange: quote.regularMarketChange
+    ? quote.regularMarketChange.toFixed(2) : "n/a",
+  marketChangePercent: quote.regularMarketChangePercent
+    ? quote.regularMarketChangePercent.toFixed(2) : "n/a",
+  currency: currencySymbols[quote.currency]
+    ? currencySymbols[quote.currency].symbol : '',
+  down: quote.regularMarketChange < 0
+})
+
 export const makeWatchListElement = (quote) => {
-  const regMarketChange = quote.regularMarketChange
-    ? quote.regularMarketChange.toFixed(2) : "n/a"
-  const marketChangePercent = quote.regularMarketChangePercent
-    ? quote.regularMarketChangePercent.toFixed(2) : "n/a"
-  const currency = currencySymbols[quote.currency]
-    ? currencySymbols[quote.currency].symbol : '';
-  let down = quote.regularMarketChange < 0;
+  const {regMarketChange, marketChangePercent, currency, down} = unpackQuote(quote);
 
   let html = sanitize(
   `<div class="d-flex justify-content-between">
@@ -88,13 +86,7 @@ export const makeWatchListElement = (quote) => {
 }
 
 export const makeQuoteDisplayComponent = (quote, profile) => {
-  const regMarketChange = quote.regularMarketChange
-    ? quote.regularMarketChange.toFixed(2) : "n/a"
-  const marketChangePercent = quote.regularMarketChangePercent
-    ? quote.regularMarketChangePercent.toFixed(2) : "n/a"
-  const currency = currencySymbols[quote.currency]
-    ? currencySymbols[quote.currency].symbol : '';
-  let down = quote.regularMarketChange < 0;
+  const {regMarketChange, marketChangePercent, currency, down} = unpackQuote(quote);
 
   let html = sanitize(
     `<div class="d-flex justify-content-between pl-3">
@@ -117,6 +109,13 @@ export const makeQuoteDisplayComponent = (quote, profile) => {
     <div class="d-flex justify-content-between mt-0 pt-0 pl-3">
       <p><small>${profile.industry || "industry n/a"}, ${profile.sector || "sector n/a"}</small></p>
       <p><small>${profile.city || "city n/a"}, ${profile.country || "country n/a"} (${quote.currency})</small></p>
+      <p>
+        <button title="${quote.symbol} company info" type="button" id="${quote.symbol}InfoBtn" class="btn btn-link btn-sm p-0 mb-0"
+          data-symbol="${quote.symbol}" data-placement="left" data-content="${profile.longBusinessSummary || "n/a"}"
+          data-toggle="popover" data-trigger="focus">
+          Company info
+        </button>
+      </p>
     </div>
 
     <hr class="mt-0 ml-3">
@@ -158,14 +157,9 @@ export const makeQuoteDisplayComponent = (quote, profile) => {
     </div>`);
 
   const newQuoteComponent = document.createElement('div');
-  newQuoteComponent.id = `${quote.symbol+'QuoteComponent'}`;
+  newQuoteComponent.id = `${quote.symbol}'QuoteComponent'`;
   newQuoteComponent.setAttribute('data-symbol', quote.symbol)
-  // newQuoteComponent.id = quote.symbol;  
   newQuoteComponent.classList.add("jumbotron", "quoteDisplayComponent", "pt-3", "pb-2", "pl-2")
   newQuoteComponent.innerHTML = html;
   return newQuoteComponent;
-}
-
-export const makeProfileComponent = () => {
-  
 }

@@ -5,12 +5,13 @@ import * as app from "./app.js"
 // Main events
 
 /////////////////////
-// Update Listeners
+// UPDATE LISTENERS
 /////////////////////
 const addListeners = {
   toWatchlist: () => document.querySelectorAll(".watchListElement").forEach(li => li.addEventListener('click', displayQuote)),
   toQuoteDisplay: () => {
-    document.querySelectorAll(".showChartBtn").forEach(btn => btn.onclick =  showChart)
+    $('[data-toggle="popover"]').popover();
+    document.querySelectorAll(".showChartBtn").forEach(btn => btn.onclick =  showChart);
     document.querySelectorAll(".removeQuoteComponentBtn").forEach(btn => btn.addEventListener('click', removeQuote))
   }
 }
@@ -20,10 +21,10 @@ const addListeners = {
 /////////////////////
 const searchStockTicker = event => {
   const symbol = document.querySelector("#stockTickerInput").value.trim().toUpperCase();
-
-  // Decides if search works, replace with check
-  const symbolIsGood = true;
-  symbolIsGood && displayQuote(event);
+  // Decides if search works: not blank, no spaces, no numbers
+  const symbolIsGood = symbol && !(symbol.includes(" ")) && symbol && symbol.split("").every(char => isNaN(char))
+  
+  symbolIsGood && displayQuote(event).catch(error => console.log(error));
 }
 
 //////////////////////
@@ -33,7 +34,7 @@ const updateWatchList = event => {
   app.watchList.innerHTML = "";
   const update = event.target.value === "Top gainers"
     ? populateTopGainers() : populateMostWatched();
-  update.then(() => addListeners.toWatchlist())
+  update.then(() => addListeners.toWatchlist()).catch(error => console.log(error))
 }
 
 const populateMostWatched = () => {
@@ -67,19 +68,19 @@ const displayQuote = event => {
     return getProfile(symbol)
       .then(profile => app.updateQuoteDisplay(quoteFromWatchList, profile))
       .then(() => addListeners.toQuoteDisplay())
-      .catch(error => console.log(error))
+      .catch(error => alert(`Invalid search: "${symbol}" -> Error: ${error}`))
   }
   // Get quote, get profile, then update
-  Promise.all([getQuote(symbol), getProfile(symbol)])
+  return Promise.all([getQuote(symbol), getProfile(symbol)])
     .then(quoteAndProfile => app.updateQuoteDisplay(...quoteAndProfile))
     .then(() => addListeners.toQuoteDisplay())
-    .catch(error => console.log(error)
+    .catch(error => alert(`Invalid search: "${symbol}" -> Error: ${error}`)
   )
 }
+
 const removeQuote = event => {
   app.removeFromQuoteDisplay(event.target.parentNode.parentNode)
 }
-
 
 
 //////////////////////
@@ -88,7 +89,6 @@ const removeQuote = event => {
 const showChart = event => {
   let symbol = event.target.dataset.symbol
   let interval = '1d'
-  let quoteComponentObj = app.currentlyDisplayed.quoteComponents.find(component => component.symbol === symbol)
 
   // Check currentlyDisplayed for matching history
   const alreadyDisplayed = app.currentlyDisplayed.histories[symbol]
@@ -96,13 +96,14 @@ const showChart = event => {
     ? app.addChartToQuoteDisplay(alreadyDisplayed)
     : getStockHistory(symbol, interval)
       .then(history => app.addChartToQuoteDisplay(history))
+      .catch(error => console.log(error))
 
-  // Change "show chart" button to "hide chart" and assign new onlick
-  // from here on out will toggle between hide and show
+  // Toggle show/hide chart
   const displaySelector = document.querySelector(`#${symbol}ShowChartBtn`);
   displaySelector.textContent = "Hide chart";
   displaySelector.onclick = hideChart;
 }
+
 const hideChart = event => {
   const symbol = event.target.dataset.symbol
   const chartDiv = document.querySelector(`#${symbol}ChartDiv`)
@@ -111,6 +112,7 @@ const hideChart = event => {
   displaySelector.textContent = "Show chart";
   displaySelector.onclick = reShowChart;
 }
+
 const reShowChart = event => {
   const symbol = event.target.dataset.symbol
   const chartDiv = document.querySelector(`#${symbol}ChartDiv`)
@@ -120,8 +122,8 @@ const reShowChart = event => {
   displaySelector.onclick = hideChart;
 }
 
-
 // Setup
+
 document.querySelector("#watchListSelect")
   .addEventListener('change', updateWatchList)
 document.querySelector("#searchBtn")

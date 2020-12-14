@@ -2,31 +2,26 @@
 <html lang="en">
   <head>
     <title>Stock Rocket</title>
-
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">    
-    <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.stock.min.js"></script>
-    <script src="assets/main.js" defer></script>
-    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link rel="icon" type="image" href="https://www.flaticon.com/svg/static/icons/svg/1735/1735805.svg">
   </head>
   <body>
-
     <div id="root" class="container-fluid m-1">
 
       <div id="header" class="d-flex justify-content-center m-4">
         <h2>Stock Rocket</h1>
-            <p>
-
-            </p>
+            <p></p>
       </div>
+
+      <hr class="m-2">
 
       <div id="row1" class="row">
 
         <div id="watchListCol" class="col-md-4">
-          <!-- <h5 class="text-center">Watchlist</h5> -->
+          <strong class="m-2">Watchlist</strong>
           <select id="watchListSelect" class="form-control">
             <option>Top gainers</option>
             <option>Most watched</option>
@@ -35,7 +30,7 @@
         </div>
 
         <div id="quoteDisplayCol" class="col-md-8 pl-2">
-          <!-- <h5>Search for a quote</h5> -->
+          <strong class="m-2">Search for a quote</strong>
           <div class="input-group">
             <input id="stockTickerInput" type="text" class="form-control" placeholder="AAPL">
             <div class="input-group-append">
@@ -43,8 +38,28 @@
             </div>
           </div>
         </div>
+        
 
       </div>
     </div>
+    
+
+    <footer class="d-flex text-center">
+
+        <small>App by <a href="https://github.com/TurbulentRice" title="Sean Russell">Sean Russell</a>.
+        Icons made by <a href="https://www.flaticon.com/authors/kiranshastry" title="Kiranshastry">Kiranshastry</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></small>
+
+    </footer>
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <!-- Canvas.js -->
+    <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.stock.min.js"></script>
+    <!-- Main js -->
+    <script src="assets/main.js" defer></script>
   </body>
+
 </html>

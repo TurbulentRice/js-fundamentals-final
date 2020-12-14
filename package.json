@@ -13,8 +13,7 @@
   "sourceMaps": true,
   "scripts": {
     "build": "webpack",
-    "start": "node server.js",
-    "dev": "webpack serve --mode development --open 'Google Chrome'"
+    "start": "webpack serve --mode development --open 'Google Chrome'"
   },
   "repository": {
     "type": "git",
@@ -34,7 +33,6 @@
     "babel-loader": "^8.2.2",
     "css-loader": "^5.0.1",
     "dotenv-webpack": "^6.0.0",
-    "express": "^4.17.1",
     "node-sass": "^5.0.0",
     "sass-loader": "^10.1.0",
     "source-map-loader": "^1.1.2",

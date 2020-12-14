@@ -1,5 +1,6 @@
-// Updating DOM Elements
 import { makeWatchListElement, makeQuoteDisplayComponent, makeChartComponent } from "./components.js"
+
+// Updating DOM
 
 // Elements
 export const root = document.querySelector("#root")
@@ -7,9 +8,7 @@ export const watchList = document.querySelector("#watchList")
 export const quoteDisplayCol = document.querySelector("#quoteDisplayCol")
 export const quoteDisplayComponent = () => document.querySelector("#quoteDisplayComponent")
 
-
-// "State" representation
-// Keep track of data to avoid multiple calls
+// "Cache" - Keeps track of some data to avoid multiple calls
 export const currentlyDisplayed = {
   quoteComponents: [],
   watchList: [],
@@ -23,9 +22,10 @@ export const addToWatchlist = (quote) => {
 }
 
 export const updateQuoteDisplay = (quote, profile) => {
+  // Separate replace/add functions
   const replaceQuoteComponent = (newComponent, oldComponent) => {
     quoteDisplayCol.replaceChild(newComponent, oldComponent.component)
-    removeQuoteComponentFromState(oldComponent.symbol)
+    removeQuoteComponentFromCache(oldComponent.symbol)
   }
   const addQuoteComponent = (newComponent) => {
     quoteDisplayCol.appendChild(newComponent)
@@ -39,7 +39,7 @@ export const updateQuoteDisplay = (quote, profile) => {
     ? replaceQuoteComponent(newQuoteComponent, alreadyDisplayed)
     : addQuoteComponent(newQuoteComponent)
     
-  // Update state
+  // Update cache
   let componentObj = {
     symbol: quote.symbol,
     profile,
@@ -48,11 +48,13 @@ export const updateQuoteDisplay = (quote, profile) => {
   currentlyDisplayed.quoteComponents.push(componentObj);
 }
 
-export const removeQuoteComponentFromState = (symbol) => {
+export const removeQuoteComponentFromCache = (symbol) => {
   currentlyDisplayed.quoteComponents = currentlyDisplayed.quoteComponents.filter(component => component.symbol !== symbol)
 }
+
 export const removeFromQuoteDisplay = (componentToRemove) => {
-  removeQuoteComponentFromState(componentToRemove.dataset.symbol)
+  const symbol = componentToRemove.dataset.symbol
+  removeQuoteComponentFromCache(symbol)
   componentToRemove.remove()
 }
 
