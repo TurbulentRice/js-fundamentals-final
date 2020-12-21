@@ -21,7 +21,7 @@ const addListeners = {
 /////////////////////
 const searchStockTicker = event => {
   const symbol = document.querySelector("#stockTickerInput").value.trim().toUpperCase();
-  // Decides if search works: not blank, no spaces, no numbers
+  // Check that value is not blank, no spaces, no numbers
   const symbolIsGood = symbol && !(symbol.includes(" ")) && symbol && symbol.split("").every(char => isNaN(char))
   
   symbolIsGood && displayQuote(event).catch(error => console.log(error));
