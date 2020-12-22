@@ -17,6 +17,6 @@ Final project for Albany Can Code's Javascript Fundamentals Fall 2020 cohort.
 ### To run locally:
 
 - Clone repository to your computer
-- Before you can run the application, you must create a plain text file called ".env" in the top project directory with your Yahoo Finance API key (follow the format used in ".env.example")
-- If using Node.js, open command line, navigate to the project directory, and type "npm run start" to start connection at port 7000, or type "npm run dev" to launch application in Google Chrome.
-- To run the pre-bundled version, simply open /public/index.html in your browser.
+- Create a plain text file ".env" in the top project directory with your Yahoo Finance API key (follow the format used in ".env.example")
+- Open public/index.html in your browser
+- For developmentt, navigate to the project folder in the command line, and enter "npm run dev" to launch application in Google Chrome.
