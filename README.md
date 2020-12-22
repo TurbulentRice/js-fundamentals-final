@@ -1,6 +1,6 @@
 # Stock Rocket
 
-Global market tracker app, providing simple tools for monitoring daily market prices, trends and statistics, and individual stock/fund performance. Leverages the Yahoo Finance API to provide current and historical data.
+Market tracker app, providing simple tools for monitoring daily market prices, trends and statistics, and individual stock/fund performance. Leverages the Yahoo Finance API to provide current and historical data.
 
 Final project for Albany Can Code's Javascript Fundamentals Fall 2020 cohort.
 
