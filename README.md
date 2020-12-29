@@ -18,5 +18,4 @@ Final project for Albany Can Code's Javascript Fundamentals Fall 2020 cohort.
 
 - Clone repository to your computer
 - Create a plain text file ".env" in the top project directory with your Yahoo Finance API key (follow the format used in ".env.example")
-- Open public/index.html in your browser
 - For development, navigate to the project folder in the command line, and enter "npm run dev" to launch application in Google Chrome.
