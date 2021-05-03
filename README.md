@@ -1,6 +1,6 @@
 # Stock Rocket
 
-Global market tracker app, providing simple tools for monitoring daily market prices, trends and statistics, and individual stock/fund performance. Leverages the Yahoo Finance API to provide current and historical data.
+Market tracker app, providing simple tools for monitoring daily stock prices, trends and statistics, and fund performance. Leverages the Yahoo Finance API to provide current and historical stock market data.
 
 Final project for Albany Can Code's Javascript Fundamentals Fall 2020 cohort.
 
@@ -17,6 +17,6 @@ Final project for Albany Can Code's Javascript Fundamentals Fall 2020 cohort.
 ### To run locally:
 
 - Clone repository to your computer
-- Before you can run the application, you must create a plain text file called ".env" in the top project directory with your Yahoo Finance API key (follow the format used in ".env.example")
-- If using Node.js, open command line, navigate to the project directory, and type "npm run start" to start connection at port 7000, or type "npm run dev" to launch application in Google Chrome.
-- To run the pre-bundled version, simply open /public/index.html in your browser.
+- Create a plain text file ".env" in the top project directory with your Yahoo Finance API key (follow the format used in ".env.example")
+- To run the prepackaged build, simply open public/index.html
+- For development, navigate to the project folder in the command line, and install dependencies by running "npm install". Then enter "npm run dev" to launch application in Google Chrome. Press CTRL+C to terminate connection.
