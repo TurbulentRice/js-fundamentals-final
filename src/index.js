@@ -1,4 +1,3 @@
-import "./style.scss";
 import { getMostWatched, getTopGainers, getQuote, getProfile, getStockHistory } from "./async.js";
 import * as app from "./app.js";
 
