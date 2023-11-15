@@ -1,4 +1,6 @@
-import { makeWatchListElement, makeQuoteDisplayComponent, makeChartComponent } from "./components.js"
+import QuoteCard from "./Components/QuoteCard.js"
+import WatchListCard from "./Components/WatchListCard.js"
+import ChartCard from "./Components/ChartCard.js"
 
 // Updating DOM
 
@@ -17,7 +19,7 @@ export const currentlyDisplayed = {
 
 // Add/remove components
 export const addToWatchlist = (quote) => {
-  const newListItem = makeWatchListElement(quote)
+  const newListItem = WatchListCard(quote)
   watchList.appendChild(newListItem)
 }
 
@@ -31,7 +33,7 @@ export const updateQuoteDisplay = (quote, profile) => {
     quoteDisplayCol.appendChild(newComponent)
   }
 
-  const newQuoteComponent = makeQuoteDisplayComponent(quote, profile)
+  const newQuoteComponent = QuoteCard(quote, profile)
 
   // Check currentlyDisplayed to decide replace/add behavior
   let alreadyDisplayed = currentlyDisplayed.quoteComponents.find(component => component.symbol === quote.symbol)
@@ -62,7 +64,7 @@ export const addChartToQuoteDisplay = (history) => {
   const chartDiv = document.querySelector(`#${history.meta.symbol}ChartDiv`)
   chartDiv.style.display = "block"
   currentlyDisplayed.histories[history.meta.symbol] = history;
-  const newChart = makeChartComponent(history, chartDiv)
+  const newChart = ChartCard(history, chartDiv)
   newChart.render()
 }
 
