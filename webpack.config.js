@@ -27,7 +27,7 @@ module.exports = {
   devtool: "source-map",
 
   devServer: {
-    port: process.env.PORT || 7000, // Check for provided port, default = 7000
+    port: process.env.PORT || 3000, // Check for provided port, default = 3000
     static: path.resolve(__dirname, "./public"), // Folder that has your index.html file
     devMiddleware: {
       publicPath: "/assets/", // Folder where all Webpack generated code will go
