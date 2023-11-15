@@ -23,7 +23,7 @@ export const getMostWatched = () => {
   return axios
     .request(apiOptions(url))
     .then((response) => response.data)
-    .then((data) => data[0].quotes.slice(0, 10))
+    .then((data) => data.body.slice(0, 10))
     .then((symbols) => getQuote(symbols))
     .catch((error) => console.log(error));
 };
@@ -34,7 +34,7 @@ export const getTopGainers = () => {
   const url = api.BASE_URL + "/co/collections/day_gainers";
   return axios
     .request(apiOptions(url))
-    .then((response) => response.data.quotes)
+    .then((response) => response.data.body)
     .catch((error) => console.log(error));
 };
 
@@ -45,7 +45,7 @@ export const getQuote = (symbol) => {
 
   return axios
     .request(apiOptions(url))
-    .then((response) => (isMultiple ? response.data : response.data[0]))
+    .then((response) => (isMultiple ? response.data.body : response.data.body[0]))
     .catch((error) => console.log(error));
 };
 
@@ -54,15 +54,15 @@ export const getProfile = (symbol) => {
 
   return axios
     .request(apiOptions(url, { symbol }))
-    .then((response) => response.data.assetProfile)
+    .then((response) => response.data.body)
     .catch((error) => console.log(error));
 };
 
-export const getStockHistory = (symbol, interval) => {
-  const url = api.BASE_URL + `/hi/history/${symbol}/${interval}`;
+export const getStockHistory = (symbol, interval, diffandsplits = 'false') => {
+  const url = api.BASE_URL + `/hi/history`;
 
   return axios
-    .request(apiOptions(url))
+    .request(apiOptions(url, { symbol, interval, diffandsplits }))
     .then((response) => response.data)
     .catch((error) => console.log(error));
 };
