@@ -1,6 +1,5 @@
 import { h } from 'preact';
-import { useEffect, useState } from 'preact/hooks';
-import { getMostWatched, getTopGainers, getQuote, getProfile, getStockHistory } from "../async";
+import { useEffect } from 'preact/hooks';
 import QuotelistCard from './QuotelistCard';
 
 export default function Quotelist ({ quotes, profiles, removeFromQuotelist }) {

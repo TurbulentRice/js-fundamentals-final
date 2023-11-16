@@ -6,26 +6,27 @@ import WatchlistCard from './WatchlistCard';
 export default function Watchlist ({ addToQuotelist }) {
 	const [watchlist, setWatchlist] = useState([]);
 
-	useEffect(async () => {
+	const setTopGainers = async () => {
 		const topGainers = await getTopGainers();
-		setWatchlist(topGainers);
-		addToQuotelist(topGainers[0]);
-	}, []);
-	
-	const updateWatchList = async (e) => {
-		if (e.target.value === "Top gainers") {
-			const topGainers = await getTopGainers();
-			setWatchlist(topGainers);
-		} else {
-			const mostWatched = await getMostWatched();
-			setWatchlist(mostWatched);
-		}
+		topGainers && setWatchlist(topGainers);
 	};
+
+	const setMostWatched = async () => {
+		const mostWatched = await getMostWatched();
+		mostWatched && setWatchlist(mostWatched);
+	};
+
+	const updateWatchlist = async (e) => e.target.value === "Top gainers" ? setTopGainers() : setMostWatched();
+
+	useEffect(async () => {
+		await setTopGainers();
+		watchlist.length > 0 && addToQuotelist(watchlist[0]);
+	}, []);
 
 	return (
 		<div id="watchListCol" class="col-md-4">
 			<strong class="m-2">Watchlist</strong>
-			<select id="watchListSelect" class="form-control" onChange={updateWatchList}>
+			<select id="watchListSelect" class="form-control" onChange={updateWatchlist}>
 				<option>Top gainers</option>
 				<option>Most watched</option>
 			</select>

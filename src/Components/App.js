@@ -9,11 +9,12 @@ export default function App () {
 	const [profiles, setProfiles] = useState([]);
 
 	const addToQuotelist = async (quote) => {
-		// TODO error handling...
 		const profile = await getProfile(quote.symbol);
-		profile.symbol = quote.symbol;
+		if (profile) {
+			profile.symbol = quote.symbol;
+			setProfiles([...profiles, profile]);
+		}
 		setQuotes([...quotes, quote]);
-		setProfiles([...profiles, profile]);
 	};
 
 	const removeFromQuotelist = (symbol) => {

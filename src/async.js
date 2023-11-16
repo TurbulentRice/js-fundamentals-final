@@ -1,4 +1,4 @@
-const axios = require("axios").default;
+import axios from "axios";
 
 const api = {
   HOST: process.env.API_HOST,
@@ -29,8 +29,6 @@ export const getMostWatched = () => {
 };
 
 export const getTopGainers = () => {
-  // Removed 9/23, changed endpoints
-  // const url = api.BASE_URL + "/ga/topgainers"
   const url = api.BASE_URL + "/co/collections/day_gainers";
   return axios
     .request(apiOptions(url))
