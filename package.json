@@ -1,10 +1,7 @@
 {
   "name": "stock-rocket",
   "version": "1.0.0",
-  "engine": {
-    "node": "14.21.2"
-  },
-  "description": "Final project for Albany Can Code's Javascript Fundamentals Fall 2020 cohort",
+  "description": "",
   "private": true,
   "presets": [
     "@babel/preset-env"
@@ -18,29 +15,30 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TurbulentRice/js-fundamentals-final.git"
+    "url": "git+https://github.com/TurbulentRice/stock-rocket.git"
   },
   "keywords": [],
   "author": "Sean Russell",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/TurbulentRice/js-fundamentals-final/issues"
+    "url": "https://github.com/TurbulentRice/stock-rocket/issues"
   },
-  "homepage": "https://github.com/TurbulentRice/js-fundamentals-final#readme",
+  "homepage": "https://github.com/TurbulentRice/stock-rocket#readme",
   "devDependencies": {
     "@babel/core": "^7.23.3",
+    "@babel/plugin-transform-react-jsx": "^7.22.15",
     "@babel/preset-env": "^7.23.3",
+    "@babel/preset-react": "^7.23.3",
     "axios": "^0.21.4",
     "babel-loader": "^8.2.2",
-    "css-loader": "^5.0.1",
     "dotenv-webpack": "^6.0.0",
     "express": "^4.17.1",
-    "node-sass": "^5.0.0",
-    "sass-loader": "^10.1.0",
     "source-map-loader": "^1.1.2",
-    "style-loader": "^2.0.0",
     "webpack": "^5.89.0",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1"
+  },
+  "dependencies": {
+    "preact": "^10.19.2"
   }
 }
