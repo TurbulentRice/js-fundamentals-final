@@ -17,10 +17,6 @@ module.exports = {
         exclude: /node_modules/,
         loader: "babel-loader",
       },
-      {
-        test: /\.s[ac]ss$/i,
-        use: ["source-map-loader", "style-loader", "css-loader", "sass-loader"],
-      },
     ],
   },
 
@@ -34,4 +30,12 @@ module.exports = {
     },
   },
   plugins: [new dotenv()],
+  resolve: {
+    alias: {
+      "react": "preact/compat",
+      "react-dom/test-utils": "preact/test-utils",
+      "react-dom": "preact/compat",     // Must be below test-utils
+      "react/jsx-runtime": "preact/jsx-runtime"
+    },
+  }
 };

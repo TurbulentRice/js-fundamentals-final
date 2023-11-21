@@ -1,5 +1,5 @@
-import QuoteCard from "./Components/QuoteCard.js"
-import WatchListCard from "./Components/WatchListCard.js"
+import QuotelistCard from "./Components/QuotelistCard.js"
+import WatchlistCard from "./Components/WatchlistCard.js"
 import ChartCard from "./Components/ChartCard.js"
 
 // Updating DOM
@@ -19,7 +19,7 @@ export const currentlyDisplayed = {
 
 // Add/remove components
 export const addToWatchlist = (quote) => {
-  const newListItem = WatchListCard(quote)
+  const newListItem = WatchlistCard(quote)
   watchList.appendChild(newListItem)
 }
 
@@ -33,7 +33,7 @@ export const updateQuoteDisplay = (quote, profile) => {
     quoteDisplayCol.appendChild(newComponent)
   }
 
-  const newQuoteComponent = QuoteCard(quote, profile)
+  const newQuoteComponent = QuotelistCard(quote, profile)
 
   // Check currentlyDisplayed to decide replace/add behavior
   let alreadyDisplayed = currentlyDisplayed.quoteComponents.find(component => component.symbol === quote.symbol)
