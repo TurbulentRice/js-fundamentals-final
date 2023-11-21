@@ -18,9 +18,11 @@ export default function Watchlist ({ addToQuotelist }) {
 
 	const updateWatchlist = async (e) => e.target.value === "Top gainers" ? setTopGainers() : setMostWatched();
 
-	useEffect(async () => {
-		await setTopGainers();
-		watchlist.length > 0 && addToQuotelist(watchlist[0]);
+	useEffect(() => {
+		(async() => {
+			await setTopGainers();
+			watchlist.length > 0 && addToQuotelist(watchlist[0]);
+		})();
 	}, []);
 
 	return (
